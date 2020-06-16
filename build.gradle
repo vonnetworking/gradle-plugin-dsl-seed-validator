@@ -1,15 +1,44 @@
 plugins {
+    id 'groovy'
+    id 'groovy-base'
+    id 'maven-publish'
     id 'java-gradle-plugin'
+    id "com.gradle.plugin-publish" version "0.12.0"
 }
 
-group = 'org.samples.greeting'
-version = '0.1'
+group = 'org.vonnetworking.jenkinsdslvalidator'
+version = '1.0.0'
+
+pluginBundle {
+    website = 'https://github.com/vonnetworking/gradle-plugin-dsl-seed-validator'
+    vcsUrl = 'https://github.com/vonnetworking/gradle-plugin-dsl-seed-validator.git'
+    tags = ['jenkins seed', 'jenkins dsl', 'jenkins']
+}
 
 gradlePlugin {
     plugins {
-        greetingsPlugin {
-            id = 'org.samples.greeting'
-            implementationClass = 'org.example.greeting.GreetingPlugin'
+        dslSeedValidatorPlugin {
+            id = 'org.vonnetworking.jenkinsdslvalidator.JenkinsDslValidatorPlugin'
+            displayName = "Jenkins DSL Job Validator"
+            description = "A plugin to pull out testing and validation methods for gradle wrapped jenkins DSL jobs"
+            implementationClass = 'org.vonnetworking.jenkinsdslvalidator.JenkinsDslValidatorPlugin'
+
         }
     }
+}
+
+dependencies {
+  compile localGroovy()
+  compile gradleApi()
+}
+
+publishing {
+  publications {
+    pluginPublication (MavenPublication) {
+      from            components.java
+      groupId         project.group
+      artifactId      "JenkinsDslValidatorPlugin"
+      version         project.version
+    }
+  }
 }
